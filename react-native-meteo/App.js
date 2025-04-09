@@ -2,6 +2,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { ImageBackground } from 'react-native';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
+import { useFonts } from 'expo-font';
 import { appStyles } from './app.style';
 import { Home } from './pages/home/home';
 import { MeteoAPI } from './service/meteo';
@@ -11,8 +12,14 @@ export default function App() {
   const [coordinates, setCoordinates] = useState();
   const [weather, setWeather] = useState();
 
+  // first value is a boolan that indicates if the font is loaded
+  const [isFontLoaded] = useFonts({
+    "Alata-Regular": require("./assets/fonts/Alata-Regular.ttf"),
+  });
+
+  console.log(isFontLoaded);
   useEffect(() => {
-   getUserCoordinates();
+    getUserCoordinates();
   }, []);
 
   useEffect(() => {
@@ -25,7 +32,7 @@ export default function App() {
     const weatherResponse = await MeteoAPI.fetchWeatherByCoords(coords);
     setWeather(weatherResponse);
   };
- 
+
   async function getUserCoordinates() {
     const { status } = await requestForegroundPermissionsAsync();
 
@@ -47,17 +54,17 @@ export default function App() {
   console.log(weather);
 
   return (
-    <ImageBackground 
-      source={ ForecastBackground } 
-      style={ appStyles.img_background }
-      imageStyle={ appStyles.image }
+    <ImageBackground
+      source={ForecastBackground}
+      style={appStyles.img_background}
+      imageStyle={appStyles.image}
     >
       <SafeAreaProvider>
-          <SafeAreaView style={ appStyles.container }>
-            <Home />
-          </SafeAreaView>
+        <SafeAreaView style={appStyles.container}>
+          {isFontLoaded && weather && <Home weather={weather} />}
+        </SafeAreaView>
       </SafeAreaProvider>
-  </ImageBackground>
+    </ImageBackground>
   );
 }
 
