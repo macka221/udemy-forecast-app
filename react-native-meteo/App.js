@@ -11,6 +11,7 @@ import ForecastBackground from './assets/background.png';
 export default function App() {
   const [coordinates, setCoordinates] = useState();
   const [weather, setWeather] = useState();
+  const [city, setCity] = useState();
 
   // first value is a boolan that indicates if the font is loaded
   const [isFontLoaded] = useFonts({
@@ -25,12 +26,18 @@ export default function App() {
   useEffect(() => {
     if (coordinates) {
       fetchWeatherByCoords(coordinates);
+      fetchCityByCoords(coordinates);
     }
   }, [coordinates])
 
   async function fetchWeatherByCoords(coords) {
     const weatherResponse = await MeteoAPI.fetchWeatherByCoords(coords);
     setWeather(weatherResponse);
+  };
+
+  async function fetchCityByCoords(coords) {
+    const cityResponse = await MeteoAPI.fetchCityByCoords(coords);
+    setCity(cityResponse);
   };
 
   async function getUserCoordinates() {
@@ -61,7 +68,7 @@ export default function App() {
     >
       <SafeAreaProvider>
         <SafeAreaView style={appStyles.container}>
-          {isFontLoaded && weather && <Home weather={weather} />}
+          {isFontLoaded && weather && <Home weather={weather} city={city} />}
         </SafeAreaView>
       </SafeAreaProvider>
     </ImageBackground>

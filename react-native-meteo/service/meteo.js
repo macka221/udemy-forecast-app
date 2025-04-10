@@ -7,4 +7,10 @@ export class MeteoAPI {
     const { data } = await axios.get(`${apiRootUri}?${endpoint}`);
     return data;
   }
+
+  static async fetchCityByCoords(coords) {
+    const endpoint = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.lat}&lon=${coords.lng}`;
+    const { data: { address: { city, village, town } } } = await axios.get(endpoint);
+    return city || village || town;
+  }
 }
