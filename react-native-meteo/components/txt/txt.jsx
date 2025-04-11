@@ -10,6 +10,18 @@ export function Txt({ children, style, ...restProps }) {
   const { height } = useWindowDimensions();
 
   return (
-    <Text style={[txtStyles.text, style, { fontSize: fontSize * IPHONE_13_RATIO * height }]} {...restProps}>{children}</Text>
+    <Text
+      style={[
+        txtStyles.text,
+        style,
+        {
+          fontSize: fontSize * IPHONE_13_RATIO * height,
+          padding: 5,
+        }
+      ]}
+      {...restProps}
+    >
+      {children}
+    </Text >
   )
 }

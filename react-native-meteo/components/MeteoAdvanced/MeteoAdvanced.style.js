@@ -4,7 +4,6 @@ import { Txt } from '../txt/txt';
 export const meteoAdvancedStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#000000',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-evenly',

@@ -3,10 +3,21 @@ import { useEffect, useState } from 'react';
 import { ImageBackground } from 'react-native';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import { useFonts } from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { appStyles } from './app.style';
 import { Home } from './pages/home/home';
 import { MeteoAPI } from './service/meteo';
 import ForecastBackground from './assets/background.png';
+import { Forecasts } from './pages/forecasts/Forecasts';
+
+const Stack = createNativeStackNavigator();
+
+const navTheme = {
+  colors: {
+    background: 'transparent',
+  }
+};
 
 export default function App() {
   const [coordinates, setCoordinates] = useState();
@@ -18,7 +29,6 @@ export default function App() {
     "Alata-Regular": require("./assets/fonts/Alata-Regular.ttf"),
   });
 
-  console.log(isFontLoaded);
   useEffect(() => {
     getUserCoordinates();
   }, []);
@@ -57,21 +67,27 @@ export default function App() {
     }
   }
 
-  console.log(coordinates);
-  console.log(weather);
-
   return (
-    <ImageBackground
-      source={ForecastBackground}
-      style={appStyles.img_background}
-      imageStyle={appStyles.image}
-    >
-      <SafeAreaProvider>
-        <SafeAreaView style={appStyles.container}>
-          {isFontLoaded && weather && <Home weather={weather} city={city} />}
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </ImageBackground>
+    <NavigationContainer theme={navTheme}>
+      <ImageBackground
+        source={ForecastBackground}
+        style={appStyles.img_background}
+        imageStyle={appStyles.image}
+      >
+        <SafeAreaProvider>
+          <SafeAreaView style={appStyles.container}>
+            {isFontLoaded && weather &&
+              <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }} initialRouteName='Home'>
+                <Stack.Screen name='Home'>
+                  {() => <Home weather={weather} city={city} />}
+                </Stack.Screen>
+                <Stack.Screen name='Forecasts' component={Forecasts} />
+              </Stack.Navigator>
+            }
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </ImageBackground>
+    </NavigationContainer>
   );
 }
 
