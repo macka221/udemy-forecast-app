@@ -10,8 +10,4 @@ export const homeStyle = StyleSheet.create({
   meteo_advanced: {
     flex: 1,
   },
-  text: {
-    fontSize: 30,
-    color: 'white',
-  }
 });
