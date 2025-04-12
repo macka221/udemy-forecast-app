@@ -1,11 +1,11 @@
 import { View } from 'react-native';
 import { homeStyle } from './home.style.js';
-import { Txt } from '../../components/txt/txt';
 import { MeteoBasic } from '../../components/MeteoBasic/MeteoBasic.jsx';
 import { getWeatherInterpretation } from '../../utils/meteo.utils.js';
 import { MeteoAdvanced } from '../../components/MeteoAdvanced/MeteoAdvanced.jsx';
+import { SearchBar } from '../../components/SearchBar/SearchBar.jsx';
 
-export function Home({ weather, city }) {
+export function Home({ weather, city, onSubmitSearch }) {
   const currentWeather = weather.current_weather;
   const currentInterpretation = getWeatherInterpretation(currentWeather.weathercode);
 
@@ -20,9 +20,7 @@ export function Home({ weather, city }) {
         />
       </View>
       <View style={homeStyle.searchbar_container}>
-        <Txt>
-          Search Bar
-        </Txt>
+        <SearchBar onSubmit={onSubmitSearch} />
       </View>
       <View style={homeStyle.meteo_advanced}>
         <MeteoAdvanced sunrise={weather.daily.sunrise[0].split('T')[1]} sunset={weather.daily.sunset[0].split('T')[1]} windSpeed={currentWeather.windspeed} />

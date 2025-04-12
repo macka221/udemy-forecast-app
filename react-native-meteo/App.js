@@ -1,6 +1,6 @@
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
-import { ImageBackground } from 'react-native';
+import { Alert, ImageBackground } from 'react-native';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import { useFonts } from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
@@ -50,6 +50,17 @@ export default function App() {
     setCity(cityResponse);
   };
 
+  async function fetchCoordsByCity(cityRequest) {
+    try {
+      const coordsResponse = await MeteoAPI.fetchCoordsByCity(cityRequest);
+      console.log(coordsResponse);
+      setCoordinates(coordsResponse);
+    } catch (error) {
+      Alert.alert('Oops!', error);
+    }
+
+  };
+
   async function getUserCoordinates() {
     const { status } = await requestForegroundPermissionsAsync();
 
@@ -79,7 +90,7 @@ export default function App() {
             {isFontLoaded && weather &&
               <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }} initialRouteName='Home'>
                 <Stack.Screen name='Home'>
-                  {() => <Home weather={weather} city={city} />}
+                  {() => <Home weather={weather} city={city} onSubmitSearch={fetchCoordsByCity} />}
                 </Stack.Screen>
                 <Stack.Screen name='Forecasts' component={Forecasts} />
               </Stack.Navigator>
